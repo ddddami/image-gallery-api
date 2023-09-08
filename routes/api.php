@@ -18,9 +18,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::group(['middleware' => ['auth:sanctum']], function () {
 
-
-Route::post('/images', [ImageController::class, 'store']);
-Route::get('/images', [ImageController::class, 'index']);
-Route::get('/images/{id}', [ImageController::class, 'show']);
-Route::delete('/images/{id}', [ImageController::class, 'destroy']);
+    Route::post('/images', [ImageController::class, 'store']);
+    Route::get('/images', [ImageController::class, 'index']);
+    Route::get('/images/{id}', [ImageController::class, 'show']);
+    Route::delete('/images/{id}', [ImageController::class, 'destroy']);
+});
