@@ -14,7 +14,8 @@ class ImageController extends Controller
      */
     public function index(Request $request)
     {
-        return response(Image::all());
+        $userId = auth()->user()->id;
+        return response(Image::where('user_id', $userId)->get());
     }
 
     /**
@@ -38,8 +39,12 @@ class ImageController extends Controller
 
     public function show(int $id)
     {
-        $data = Image::find($id);
-        return response($data, Response::HTTP_OK);
+        $image = Image::find($id);
+
+        if (!$image) {
+            return response()->json(['message' => 'Image not found'], 404);
+        }
+        return response($image, Response::HTTP_OK);
     }
 
     /**
@@ -53,8 +58,13 @@ class ImageController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(int $id)
     {
+        $image = Image::find($id);
+
+        if (!$image) {
+            return response()->json(['message' => 'Image not found'], 404);
+        }
         return response(Image::destroy($id), Response::HTTP_NO_CONTENT);
     }
 }
