@@ -29,8 +29,8 @@ class ImageController extends Controller
         ]);
 
         $imagePath = $request->file('image')->store('images', 'public');
-
-        $data = Image::create(['url' => $imagePath]);
+        $userId = auth()->user()->id;
+        $data = Image::create(['url' => $imagePath, 'user_id' => $userId]);
         return response($data, Response::HTTP_CREATED);
     }
     /**
