@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ImageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -15,13 +16,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+//  Public routes
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
+
+
+// Protected routes
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('/images', [ImageController::class, 'store']);
     Route::get('/images', [ImageController::class, 'index']);
     Route::get('/images/{id}', [ImageController::class, 'show']);
     Route::delete('/images/{id}', [ImageController::class, 'destroy']);
+    Route::post('/logout', [AuthController::class, 'logout']);
 });
